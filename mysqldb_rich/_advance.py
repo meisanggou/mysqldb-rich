@@ -4,11 +4,12 @@
 import os
 from _conf_db import ConfDB
 from _execute import SelectDB, InsertDB, UpdateDB, DeleteDB
+from _table import TableDB
 
 __author__ = '鹛桑够'
 
 
-class DB(ConfDB, SelectDB, InsertDB, UpdateDB, DeleteDB):
+class DB(ConfDB, SelectDB, InsertDB, UpdateDB, DeleteDB, TableDB):
 
     def __init__(self, conf_path=None, conf_dir=None, readonly=False, user=None, password=None):
         ConfDB.__init__(self, conf_path, conf_dir, readonly, user, password)
@@ -42,11 +43,3 @@ class DB(ConfDB, SelectDB, InsertDB, UpdateDB, DeleteDB):
     def source_file(self, file_path):
         cmd = "mysql -u%s -p%s %s < %s" % (self._db_user, self._db_password, self._db_name, file_path)
         os.system(cmd)
-
-    def table_exist(self, t_name):
-        where_value = dict(TABLE_SCHEMA=self._db_name, TABLE_TYPE='BASE TABLE', TABLE_NAME=t_name)
-        cols = ["TABLE_NAME", "CREATE_TIME", "TABLE_COMMENT"]
-        l = self.execute_select("information_schema.TABLES", where_value=where_value, cols=cols, package=False)
-        if l == 0:
-            return False
-        return True
