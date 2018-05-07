@@ -36,9 +36,9 @@ class DB(ConfDB, SelectDB, InsertDB, UpdateDB, DeleteDB, TableDB):
 
     def root_init_conf(self, host='localhost'):
         o = self._read_conf(self.conf_path, False)
-        self.create_user(o["db_user"], o["db_password"], host=host, db=o["db_name"], readonly=False)
+        self.create_user(o["user"], o["password"], host=host, db=o["db_name"], readonly=False)
         o = self._read_conf(self.conf_path, True)
-        self.create_user(o["db_user"], o["db_password"], host=host, db=o["db_name"], readonly=True)
+        self.create_user(o["user"], o["password"], host=host, db=o["db_name"], readonly=True)
 
     def source_file(self, file_path):
         cmd = "mysql -u%s -p%s %s < %s" % (self._db_user, self._db_password, self._db_name, file_path)
