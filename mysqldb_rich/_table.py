@@ -4,14 +4,18 @@
 import os
 import sys
 import json
+from _conf_db import ConfDB
 from _execute import SelectDB
 
 __author__ = '鹛桑够'
 
 
-class TableDB(SelectDB):
+class TableDB(ConfDB, SelectDB):
     t_tables = "information_schema.TABLES"
     t_columns = "information_schema.columns"
+
+    def __init__(self, conf_path=None, conf_dir=None, readonly=False, user=None, password=None):
+        ConfDB.__init__(self, conf_path, conf_dir, readonly, user, password)
 
     def table_exist(self, t_name):
         where_value = dict(TABLE_SCHEMA=self._db_name, TABLE_TYPE='BASE TABLE', TABLE_NAME=t_name)
