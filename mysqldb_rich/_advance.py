@@ -4,12 +4,12 @@
 import os
 from _conf_db import ConfDB
 from _execute import SelectDB, InsertDB, UpdateDB, DeleteDB
-from _table import TableDB
+
 
 __author__ = '鹛桑够'
 
 
-class DB(ConfDB, SelectDB, InsertDB, UpdateDB, DeleteDB, TableDB):
+class DB(ConfDB, SelectDB, InsertDB, UpdateDB, DeleteDB):
 
     def __init__(self, conf_path=None, conf_dir=None, readonly=False, user=None, password=None):
         ConfDB.__init__(self, conf_path, conf_dir, readonly, user, password)
