@@ -243,7 +243,11 @@ class UpdateDB(SimpleDB):
         sql_query += " AND ".join(where_cond) + ";"
         return self.execute(sql_query, args=args)
 
-    def execute_plus(self, table_name, where_value=None, where_is_none=None, where_cond=None, *args, **kwargs):
+    def execute_plus(self, table_name, *args, **kwargs):
+        where_value = kwargs.pop("where_value", None)
+        where_is_none = kwargs.pop("where_is_none", None)
+        where_cond = kwargs.pop("where_cond", None)
+
         update_value_list = []
         for item in args:
             update_value_list.append("{0}={0}+1".format(item))
