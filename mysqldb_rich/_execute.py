@@ -252,7 +252,7 @@ class UpdateDB(SimpleDB):
         return self.execute_update(table_name, update_value_list=update_value_list, where_value=where_value,
                                    where_is_none=where_is_none, where_cond=where_cond)
 
-    def execute_logic_and(self, table_name, where_value=None, where_is_none=None, where_cond=None, **kwargs):
+    def execute_logic_or(self, table_name, where_value=None, where_is_none=None, where_cond=None, **kwargs):
         update_value_list = []
         for key in kwargs:
             update_value_list.append("{0}={0}|{1}".format(key, kwargs[key]))
