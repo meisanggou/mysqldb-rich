@@ -243,6 +243,29 @@ class UpdateDB(SimpleDB):
         sql_query += " AND ".join(where_cond) + ";"
         return self.execute(sql_query, args=args)
 
+    def execute_plus(self, table_name, where_value=None, where_is_none=None, where_cond=None, *args, **kwargs):
+        update_value_list = []
+        for item in args:
+            update_value_list.append("{0}={0}+1".format(item))
+        for key in kwargs:
+            update_value_list.append("{0}={0}+{1}".format(key, kwargs[key]))
+        return self.execute_update(table_name, update_value_list=update_value_list, where_value=where_value,
+                                   where_is_none=where_is_none, where_cond=where_cond)
+
+    def execute_logic_and(self, table_name, where_value=None, where_is_none=None, where_cond=None, **kwargs):
+        update_value_list = []
+        for key in kwargs:
+            update_value_list.append("{0}={0}|{1}".format(key, kwargs[key]))
+        return self.execute_update(table_name, update_value_list=update_value_list, where_value=where_value,
+                                   where_is_none=where_is_none, where_cond=where_cond)
+
+    def execute_logic_non(self, table_name, where_value=None, where_is_none=None, where_cond=None, **kwargs):
+        update_value_list = []
+        for key in kwargs:
+            update_value_list.append("{0}={0}&~1}".format(key, kwargs[key]))
+        return self.execute_update(table_name, update_value_list=update_value_list, where_value=where_value,
+                                   where_is_none=where_is_none, where_cond=where_cond)
+
 
 class DeleteDB(SimpleDB):
 
