@@ -246,9 +246,9 @@ class UpdateDB(SimpleDB):
 
 class DeleteDB(SimpleDB):
 
-    def execute_delete(self, table_name, where_value):
-        args = dict(where_value).values()
-        if len(args) <= 0:
+    def execute_delete(self, table_name, where_value=None, where_cond=None):
+        where_cond, args = merge_where(where_value=where_value, where_cond=where_cond)
+        if len(where_cond) <= 0:
             return 0
-        sql_query = "DELETE FROM %s WHERE %s=%%s;" % (table_name, "=%s AND ".join(dict(where_value).keys()))
+        sql_query = "DELETE FROM %s WHERE %s;" % (table_name,  " AND ".join(where_cond))
         return self.execute(sql_query, args)
