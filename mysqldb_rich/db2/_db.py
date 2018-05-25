@@ -32,7 +32,6 @@ class SimpleDB(object):
     @staticmethod
     def _connect(host, port, user, password, db_name, shareable=True):
         if SimpleDB._pool is None:
-            print("init pool")
             if shareable is True:
                 SimpleDB._pool = PooledDB(MySQLdb, host=host, port=port, user=user, passwd=password, db=db_name,
                                           charset='utf8', blocking=1, maxconnections=SimpleDB.max_connections)

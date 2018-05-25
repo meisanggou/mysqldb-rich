@@ -16,7 +16,7 @@ if sys.version_info <= (2, 7):
     sys.exit(1)
 
 name = "mysqldb-rich"
-version = "1.1"
+version = "1.2"
 url = "https://github.com/meisanggou/mysqldb-rich"
 license = "MIT"
 author = "meisanggou"
@@ -30,7 +30,7 @@ setup(name=name,
       author=author,
       author_email="zhouheng@gene.ac",
       url=url,
-      packages=["mysqldb_rich"],
+      packages=["mysqldb_rich", "mysqldb_rich/db2"],
       license=license,
       description=short_description,
       long_description=long_description,
