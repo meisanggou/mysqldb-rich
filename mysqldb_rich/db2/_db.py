@@ -98,6 +98,7 @@ class SimpleDB(object):
         if thread_data.cursor:
             thread_data.cursor.close()
         if thread_data.conn:
+            thread_data.conn.commit()
             thread_data.conn.close()
         thread_data.conn = None
         thread_data.cursor = None

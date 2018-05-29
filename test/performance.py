@@ -27,13 +27,21 @@ def test_select(freq=1):
     print("use time %s" % use_time)
 
 
+def test_insert(freq=1):
+    for i in range(freq):
+        account = "TF%s%s" % (int(time.time()), i)
+        kwargs = dict(account=account)
+        l = db.execute_insert(t, kwargs=kwargs, ignore=True)
+        print(l)
+
+
 if __name__ == "__main__":
-    freq = 1000
-    test_select(freq)
-    freq *= 10
-    test_select(freq)
-    freq *= 10
-    test_select(freq)
+    freq = 10
+    test_insert(freq)
+    # freq *= 10
+    # test_select(freq)
+    # freq *= 10
+    # test_select(freq)
     # freq *= 10
     # test_select(freq)
     # freq *= 10
