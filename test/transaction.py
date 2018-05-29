@@ -32,7 +32,7 @@ def update(index):
         _print = partial(special_print, "-----update-----%s-----" % index)
         for i in range(5):
             _print("start select")
-            items = db.execute_select(t, cols=cols, where_value=dict(user_no=5872))
+            items = db.execute_select_with_lock(t, cols=cols, where_value=dict(user_no=5872))
             role = items[0]["role"]
             _print(role)
             _print("start update")
@@ -43,18 +43,19 @@ def update(index):
             # l = db.execute_update(t, update_value_list=["role=role+1"], where_value=dict(user_no=5872))
             _print("line %s" % l)
             # sleep(1)
-        sleep(10)
+        # sleep(10)
         db.end_transaction()
         # sleep(20)
     except Exception as e:
         print(e)
-        sleep(1000)
+        db.end_transaction(fail=True)
+        sleep(1)
 
 
 if __name__ == "__main__":
     # t_read = threading.Thread(target=read, args=(1, ))
     # t_read.start()
-    for i in range(5):
+    for i in range(500):
         t_update = threading.Thread(target=update, args=(i, ))
         t_update.start()
     sleep(200)

@@ -73,7 +73,7 @@ class SimpleDB(object):
             self.current_transaction = True
 
     def end_transaction(self, fail=False):
-        if fail is True:
+        if fail is True and self.thread_data.conn:
             self.thread_data.conn.rollback()
         self.current_transaction = False
         self.close()
@@ -94,11 +94,12 @@ class SimpleDB(object):
                 print(sql_query)
             handled_item = self.thread_data.cursor.execute(sql_query, args=args)
         except MySQLdb.Error as error:
+            if self.current_transaction is True:
+                self.end_transaction(fail=True)
+                self.close()
+                raise MySQLdb.Error(error)
             print(error)
             if freq >= 3 or error.args[0] in [1054, 1064, 1146, 1065, 1040]:  # 列不存在 sql错误 表不存在 empty_query too_many_connectons
-                if self.current_transaction is True:
-                    self.end_transaction(fail=True)
-                self.close()
                 raise MySQLdb.Error(error)
             self.connect()
             return self.execute(sql_query=sql_query, args=args, freq=freq + 1, w_literal=True, auto_close=auto_close)

@@ -90,6 +90,7 @@ class SelectDB(SimpleDB):
         where_is_none = kwargs.pop("where_is_none", None)
         where_cond_args = kwargs.pop("where_cond_args", None)
         prefix_value = kwargs.pop("prefix_value", None)
+        update_lock = kwargs.pop("update_lock", False)
         where_cond, args = merge_where(where_value=where_value, where_cond=where_cond, where_is_none=where_is_none,
                                        where_cond_args=where_cond_args, prefix_value=prefix_value)
         if cols is None:
@@ -112,6 +113,8 @@ class SelectDB(SimpleDB):
                 sql_query += " DESC"
         if isinstance(limit, int):
             sql_query += " LIMIT %s" % limit
+        if update_lock is True:
+            sql_query += " FOR UPDATE"
         sql_query += ";"
         print_sql = kwargs.get("print_sql", False)
         exec_result = self.execute(sql_query, args, print_sql=print_sql, auto_close=False)
@@ -137,6 +140,11 @@ class SelectDB(SimpleDB):
                 select_items.append(r_item)
             return select_items
         return db_items
+
+    def execute_select_with_lock(self, table_name, where_value=None, where_cond=None, cols=None, package=True, **kwargs):
+        kwargs["update_lock"] = True
+        return self.execute_select(table_name, where_value=where_value, where_cond=where_cond, cols=cols,
+                                   package=package, **kwargs)
 
 
 class InsertDB(SimpleDB):
