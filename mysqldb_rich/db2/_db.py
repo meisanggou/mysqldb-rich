@@ -72,7 +72,8 @@ class SimpleDB(object):
         if self.current_transaction is False:
             self.current_transaction = True
 
-    def end_transaction(self, fail=False):
+    def end_transaction(self, **kwargs):
+        fail = kwargs.pop("fail", False)
         if fail is True and self.thread_data.conn:
             self.thread_data.conn.rollback()
         self.current_transaction = False
