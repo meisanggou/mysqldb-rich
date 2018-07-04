@@ -20,7 +20,8 @@ class TableDB(ConfDB, SelectDB):
     def table_exist(self, t_name):
         where_value = dict(TABLE_SCHEMA=self._db_name, TABLE_TYPE='BASE TABLE', TABLE_NAME=t_name)
         cols = ["TABLE_NAME", "CREATE_TIME", "TABLE_COMMENT"]
-        l = self.execute_select(self.t_tables, where_value=where_value, cols=cols, package=False)
+        items = self.execute_select(self.t_tables, where_value=where_value, cols=cols, package=True)
+        l = len(items)
         if l == 0:
             return False
         return True
