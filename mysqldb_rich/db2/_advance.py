@@ -3,10 +3,16 @@
 
 import os
 from _conf_db import ConfDB
-from _execute import SelectDB, InsertDB, UpdateDB, DeleteDB
+from _execute import SimpleDB, SelectDB, InsertDB, UpdateDB, DeleteDB
 
 
 __author__ = '鹛桑够'
+
+
+class RichDB(SelectDB, InsertDB, UpdateDB, DeleteDB):
+
+    def __init__(self, host, port, user, password, db_name):
+        SimpleDB.__init__(self, host, port, user, password, db_name)
 
 
 class DB(ConfDB, SelectDB, InsertDB, UpdateDB, DeleteDB):
