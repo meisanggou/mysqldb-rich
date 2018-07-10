@@ -12,7 +12,8 @@ class ConfDB(SimpleDB):
     conf_name = "mysql_app.conf"
     conf_path_environ_key = "DB_CONF_PATH"
 
-    def __init__(self, conf_path=None, conf_dir=None, readonly=False, user=None, password=None):
+    def __init__(self, conf_path=None, conf_dir=None, readonly=False, user=None, password=None, db_host=None,
+                 db_port=None, db_name=None):
         self.readonly = readonly
         if conf_path is None:
             if conf_dir is not None:
@@ -26,6 +27,12 @@ class ConfDB(SimpleDB):
         if user is not None and password is not None:
             o["user"] = user
             o["password"] = password
+        if db_host is not None:
+            o["host"] = db_host
+        if db_port is not None:
+            o["port"] = db_port
+        if db_name is not None:
+            o["db_name"] = db_name
         SimpleDB.__init__(self, **o)
 
     @staticmethod
