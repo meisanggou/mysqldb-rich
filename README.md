@@ -1,6 +1,6 @@
 # mysqldb_rich
 
-## 1.7
+## 1.8
 add RichDB
 
 ## 1.6
