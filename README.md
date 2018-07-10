@@ -1,5 +1,8 @@
 # mysqldb_rich
 
+## 1.9
+add execute_select_left
+
 ## 1.8
 add RichDB
 

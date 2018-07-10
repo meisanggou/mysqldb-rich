@@ -146,6 +146,64 @@ class SelectDB(SimpleDB):
         return self.execute_select(table_name, where_value=where_value, where_cond=where_cond, cols=cols,
                                    package=package, **kwargs)
 
+    def execute_select_left(self, b_t_name, j_t_name, join_key, **kwargs):
+        where_is_none = kwargs.pop("where_is_none", None)
+        where_value = kwargs.pop("where_value", {"1": 1})
+        where_cond = kwargs.pop("where_cond", None)
+        where_cond, args = merge_where(where_value=where_value, where_cond=where_cond, where_is_none=where_is_none)
+        cols = list()
+        package_keys = list()
+        b_cols = kwargs.pop("b_cols", None)
+        if b_cols is not None and isinstance(b_cols, list):
+            for b_col in b_cols:
+                cols.append("%s.%s" % (b_t_name, b_col))
+                package_keys.append(b_col)
+        j_cols = kwargs.pop("j_cols", None)
+        if j_cols is not None and isinstance(j_cols, list):
+            for j_col in j_cols:
+                cols.append("%s.%s" % (j_t_name, j_col))
+                package_keys.append(j_col)
+        if len(cols) <= 0:
+            s_item = "*"
+        else:
+            s_item = ",".join(cols)
+        sql_query = "SELECT {0} FROM {1} LEFT JOIN {2} ON {1}.{3}={2}.{3}".format(s_item, b_t_name, j_t_name, join_key)
+        if len(where_cond) > 0:
+            sql_query += " WHERE %s" % " AND ".join(where_cond)
+        order_by = kwargs.pop("order_by", None)
+        order_desc = kwargs.pop("order_desc", False)
+        limit = kwargs.pop("limit", None)
+        if order_by is not None and (isinstance(order_by, list) or isinstance(order_by, tuple)):
+            sql_query += " ORDER BY %s" % ",".join(order_by)
+            if order_desc is True:
+                sql_query += " DESC"
+        if isinstance(limit, int):
+            sql_query += " LIMIT %s" % limit
+        sql_query += ";"
+        exec_result = self.execute(sql_query, args, auto_close=False)
+        db_items = self.fetchall()
+        if len(package_keys) > 0:
+            select_items = []
+            for db_item in db_items:
+                r_item = dict()
+                for i in range(len(package_keys)):
+                    c_v = db_item[i]
+                    if isinstance(c_v, datetime):
+                        c_v = c_v.strftime(self.TIME_FORMAT)
+                    elif isinstance(c_v, date):
+                        c_v = c_v.strftime(self.DATE_FORMAT)
+                    elif isinstance(c_v, str):
+                        if c_v == "\x00":
+                            c_v = False
+                        elif c_v == "\x01":
+                            c_v = True
+                        else:
+                            print(c_v)
+                    r_item[package_keys[i]] = c_v
+                select_items.append(r_item)
+            return select_items
+        return db_items
+
 
 class InsertDB(SimpleDB):
 
