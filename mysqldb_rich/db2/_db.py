@@ -15,7 +15,7 @@ class SimpleDB(object):
     DATE_FORMAT = '%Y-%m-%d'
     AUTO_CLOSE = False
 
-    _pool = None
+    _pool = dict()
     max_connections = 3
 
     def __init__(self, host, port, user, password, db_name):
@@ -30,15 +30,16 @@ class SimpleDB(object):
 
     @staticmethod
     def _connect(host, port, user, password, db_name, shareable=True):
-        if SimpleDB._pool is None:
+        _pool_id = "%s_%s_%s_%s" % (host, port, user, db_name)
+        if _pool_id not in SimpleDB._pool:
+            comm_kwargs = dict(host=host, port=port, user=user, passwd=password, db=db_name, charset="utf8")
             if shareable is True:
-                SimpleDB._pool = PooledDB(MySQLdb, host=host, port=port, user=user, passwd=password, db=db_name,
-                                          charset='utf8', blocking=1, maxconnections=SimpleDB.max_connections)
+                pool = PooledDB(MySQLdb, blocking=1, maxconnections=SimpleDB.max_connections, **comm_kwargs)
             else:
-                SimpleDB._pool = PersistentDB(MySQLdb, host=host, port=port, user=user, passwd=password, db=db_name,
-                                              charset='utf8')
+                pool = PersistentDB(MySQLdb, **comm_kwargs)
+            SimpleDB._pool[_pool_id] = pool
 
-        conn = SimpleDB._pool.connection()
+        conn = SimpleDB._pool[_pool_id].connection()
         cursor = conn.cursor()
         return conn, cursor
 

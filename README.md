@@ -1,5 +1,8 @@
 # mysqldb_rich
 
+## 2.1
+解决两个连接使用不同数据库问题
+
 ## 2.0
 AUTO_CLOSE default is False
 
