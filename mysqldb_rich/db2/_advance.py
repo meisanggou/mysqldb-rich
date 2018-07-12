@@ -25,7 +25,7 @@ class DB(ConfDB, SelectDB, InsertDB, UpdateDB, DeleteDB):
         sql_query = "CALL %s(" % p_name
         sql_query += ",".join(map(self.literal, args))
         sql_query += ");"
-        return self.execute(sql_query)
+        return self.execute(sql_query, auto_close=True)
 
     def table_exist(self, t_name):
         where_value = dict(TABLE_SCHEMA=self._db_name, TABLE_TYPE='BASE TABLE', TABLE_NAME=t_name)
@@ -39,13 +39,13 @@ class DB(ConfDB, SelectDB, InsertDB, UpdateDB, DeleteDB):
         l = self.execute_select("mysql.user", where_value=dict(user=user, host=host))
         if l <= 0:
             c_sql = "CREATE USER %s@%s IDENTIFIED BY %s;"
-            self.execute(c_sql, args=(user, host, password))
+            self.execute(c_sql, args=(user, host, password), auto_close=True)
         if db is not None:
             if readonly is False:
                 g_sql = "GRANT ALL ON {db}.* TO %s@%s;"
             else:
                 g_sql = "GRANT SELECT ON {db}.* TO %s@%s;"
-            self.execute(g_sql.format(db=db), args=(user, host))
+            self.execute(g_sql.format(db=db), args=(user, host), auto_close=True)
         return True
 
     def root_init_conf(self, host='localhost'):

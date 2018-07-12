@@ -214,7 +214,7 @@ class InsertDB(SimpleDB):
                                                                           ")s,%(".join(keys))
         else:
             sql_query = "INSERT INTO %s (%s) VALUES (%%(%s)s);" % (table_name, ",".join(keys), ")s,%(".join(keys))
-        return self.execute(sql_query, args=kwargs)
+        return self.execute(sql_query, args=kwargs, auto_close=True)
 
     def execute_duplicate_insert(self, t_name, kwargs, u_keys=None, p1_keys=None, u_v=None):
         if isinstance(kwargs, dict) is False:
@@ -232,7 +232,7 @@ class InsertDB(SimpleDB):
             return self.execute_insert(t_name, kwargs)
         sql = "INSERT INTO %s (%s) VALUES (%%(%s)s) ON DUPLICATE KEY UPDATE %s;" \
               % (t_name, ",".join(keys), ")s,%(".join(keys), ",".join(u_v))
-        return self.execute(sql, args=kwargs)
+        return self.execute(sql, args=kwargs, auto_close=True)
 
     def execute_insert_mul(self, table_name, cols, value_list, ignore=False):
         keys = cols
@@ -249,7 +249,7 @@ class InsertDB(SimpleDB):
             sql_query += "(" + ("%s," * len(value_item)).rstrip(",") + "),"
             args.extend(value_item)
         sql_query = sql_query.rstrip(",") + ";"
-        return self.execute(sql_query, args=args)
+        return self.execute(sql_query, args=args, auto_close=True)
 
     def execute_duplicate_insert_mul(self, t_name, cols, values, u_keys=None, p1_keys=None, concat_keys=None, u_v=None,
                                      print_sql=False):
@@ -275,7 +275,7 @@ class InsertDB(SimpleDB):
             sql_query += "(" + ("%s," * len(value_item)).rstrip(",") + "),"
             args.extend(value_item)
         sql_query = sql_query.rstrip(",") + " ON DUPLICATE KEY UPDATE %s;" % ",".join(u_l)
-        return self.execute(sql_query, args=args, print_sql=print_sql)
+        return self.execute(sql_query, args=args, print_sql=print_sql, auto_close=True)
 
 
 class UpdateDB(SimpleDB):
@@ -307,7 +307,7 @@ class UpdateDB(SimpleDB):
             for key in where_is_none:
                 where_cond.append("%s is NULL" % key)
         sql_query += " AND ".join(where_cond) + ";"
-        return self.execute(sql_query, args=args)
+        return self.execute(sql_query, args=args, auto_close=True)
 
     def execute_plus(self, table_name, *args, **kwargs):
         where_value = kwargs.pop("where_value", None)
@@ -344,4 +344,4 @@ class DeleteDB(SimpleDB):
         if len(where_cond) <= 0:
             return 0
         sql_query = "DELETE FROM %s WHERE %s;" % (table_name,  " AND ".join(where_cond))
-        return self.execute(sql_query, args)
+        return self.execute(sql_query, args, auto_close=True)

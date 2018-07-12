@@ -13,6 +13,7 @@ __author__ = '鹛桑够'
 class SimpleDB(object):
     TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
     DATE_FORMAT = '%Y-%m-%d'
+    AUTO_CLOSE = False
 
     _pool = None
     max_connections = 3
@@ -79,7 +80,7 @@ class SimpleDB(object):
         self.current_transaction = False
         self.close()
 
-    def execute(self, sql_query, args=None, freq=0, print_sql=False, w_literal=False, auto_close=True):
+    def execute(self, sql_query, args=None, freq=0, print_sql=False, w_literal=False, auto_close=AUTO_CLOSE):
         if "cursor" not in self.thread_data.__dict__:
             self.thread_data.cursor = None
         if self.thread_data.cursor is None:

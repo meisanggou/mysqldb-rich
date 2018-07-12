@@ -38,7 +38,7 @@ class TableDB(ConfDB, SelectDB):
         c_dv = "" if default_value is None else "DEFAULT %s" % default_value
         sql = add_sql.format(t_name=t_name, c_name=col_name, c_type=col_type, c_null=c_null, c_comment=col_comment,
                              c_dv=c_dv)
-        self.execute(sql, print_sql=True)
+        self.execute(sql, print_sql=True, auto_close=True)
         return True
 
     def update_table(self, table_desc):
@@ -126,24 +126,24 @@ class TableDB(ConfDB, SelectDB):
                         execute_message += "%s Table exist\n" % t_name_item
                         continue
                     print("drop")
-                    self.execute("DROP TABLE %s" % t_name_item)
+                    self.execute("DROP TABLE %s" % t_name_item, auto_close=True)
                 create_table_sql = "CREATE TABLE %s ( %s )" % (t_name_item, ",".join(fields))
                 item_comment = comment % t_item
                 create_table_sql += " COMMENT '%s'" % item_comment
                 create_table_sql += " DEFAULT CHARSET=utf8;"
-                self.execute(create_table_sql)
+                self.execute(create_table_sql, auto_close=True)
                 execute_message += "CREATE TABLE %s Success \n" % t_name_item
         else:
             if self.table_exist(table_name) is True:
                 if exists_drop is False:
                     self.update_table(table_desc)
                     return False, "Table exist."
-                self.execute("DROP TABLE %s" % table_name)
+                self.execute("DROP TABLE %s" % table_name, auto_close=True)
             create_table_sql = "CREATE TABLE %s ( %s )" % (table_name, ",".join(fields))
             if "table_comment" in table_desc and table_desc["table_comment"] != "":
                 create_table_sql += " COMMENT '%s'" % table_desc["table_comment"]
             create_table_sql += " DEFAULT CHARSET=utf8;"
-            self.execute(create_table_sql)
+            self.execute(create_table_sql, auto_close=True)
             execute_message += "CREATE TABLE %s Success \n" % table_name
         return True, execute_message
 

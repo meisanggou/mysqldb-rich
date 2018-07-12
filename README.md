@@ -1,5 +1,8 @@
 # mysqldb_rich
 
+## 2.0
+AUTO_CLOSE default is False
+
 ## 1.9
 add execute_select_left
 
