@@ -108,6 +108,8 @@ class SimpleDB(object):
             return self.execute(sql_query=sql_query, args=args, freq=freq + 1, w_literal=True, auto_close=auto_close)
         if auto_close is True and self.current_transaction is False:
             self.close()
+        elif self.current_transaction is False:
+            self.thread_data.conn.commit()
         return handled_item
 
     def fetchone(self):
