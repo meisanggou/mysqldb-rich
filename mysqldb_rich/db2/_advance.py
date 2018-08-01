@@ -57,3 +57,7 @@ class DB(ConfDB, SelectDB, InsertDB, UpdateDB, DeleteDB):
     def source_file(self, file_path):
         cmd = "mysql -u%s -p%s %s < %s" % (self._db_user, self._db_password, self._db_name, file_path)
         os.system(cmd)
+
+    def link(self):
+        cmd = "mysql -h%s -u%s -p'%s' %s" % (self.host, self._db_user, self._db_password, self._db_name)
+        os.system(cmd)

@@ -1,5 +1,8 @@
 # mysqldb_rich
 
+## 2.3
+DB add function link
+
 ## 2.2
 fix db2.DB not commit
 
