@@ -1,6 +1,6 @@
 # mysqldb_rich
 
-## 2.3
+## 2.4
 DB add function link
 
 ## 2.2
