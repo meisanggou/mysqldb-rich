@@ -1,5 +1,8 @@
 # mysqldb_rich
 
+## 2.5
+fix execute_multi_select bug
+
 ## 2.4
 DB add function link
 

@@ -50,6 +50,8 @@ class SelectDB(SimpleDB):
                 for value in value_list:
                     sql_query += "{0} WHERE {1}=%s union ".format(select_sql, item)
                     args.append(value)
+        if len(sql_query) <= 0:
+            return []
         sql_query = sql_query[:-7]
         order_by = kwargs.pop("order_by", None)
         order_desc = kwargs.pop("order_desc", False)
