@@ -1,5 +1,8 @@
 # mysqldb_rich
 
+## 2.6
+fix execute_logic_non bug
+
 ## 2.5
 fix execute_multi_select bug
 
