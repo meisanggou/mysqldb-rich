@@ -41,7 +41,7 @@ class TableDB(ConfDB, SelectDB):
                              c_dv=c_dv)
         self.execute(sql, print_sql=True)
         if uni_key is True:
-            uni_sql = "ALTER TABLE {t_name} ADD UNIQUE ('{col_name}')".format(t_name=t_name, col_name=col_name)
+            uni_sql = "ALTER TABLE {t_name} ADD UNIQUE ({col_name});".format(t_name=t_name, col_name=col_name)
             self.execute(uni_sql, print_sql=True)
         return True
 
