@@ -31,13 +31,17 @@ class TableDB(ConfDB, SelectDB):
         items = self.execute_select(self.t_columns, cols=cols, where_value=where_value)
         return items
 
-    def add_table_column(self, t_name, col_name, col_type, col_comment='', allow_null=False, default_value=None):
+    def add_table_column(self, t_name, col_name, col_type, col_comment='', allow_null=False, default_value=None,
+                         uni_key=False):
         add_sql = u"ALTER TABLE {t_name} ADD COLUMN  {c_name} {c_type} {c_dv} {c_null} COMMENT '{c_comment}';"
         c_null = "" if allow_null is True else "NOT NULL"
         c_dv = "" if default_value is None else "DEFAULT %s" % default_value
         sql = add_sql.format(t_name=t_name, c_name=col_name, c_type=col_type, c_null=c_null, c_comment=col_comment,
                              c_dv=c_dv)
         self.execute(sql, print_sql=True)
+        if uni_key is True:
+            uni_sql = "ALTER TABLE {t_name} ADD UNIQUE ('{col_name}')".format(t_name=t_name, col_name=col_name)
+            self.execute(uni_sql, print_sql=True)
         return True
 
     def update_table(self, table_desc):

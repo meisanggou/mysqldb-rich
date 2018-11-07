@@ -1,5 +1,8 @@
 # mysqldb_rich
 
+## 2.7 
+表结构更新时支持uni_key
+
 ## 2.6
 fix execute_logic_non bug
 
