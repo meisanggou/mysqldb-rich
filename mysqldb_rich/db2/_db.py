@@ -18,7 +18,7 @@ class SimpleDB(object):
     _pool = dict()
     max_connections = 3
 
-    def __init__(self, host, port, user, password, db_name):
+    def __init__(self, host, port, user, password, db_name, charset="utf8"):
         self.thread_data = threading.local()
         self.thread_data.conn = None
         self.thread_data.cursor = None
@@ -27,12 +27,17 @@ class SimpleDB(object):
         self._db_user = user
         self._db_password = password
         self._db_name = db_name
+        if charset == "":
+            charset = None
+        self._connect_charset = charset
 
     @staticmethod
-    def _connect(host, port, user, password, db_name, shareable=True):
+    def _connect(host, port, user, password, db_name, connect_charset=None, shareable=True):
         _pool_id = "%s_%s_%s_%s" % (host, port, user, db_name)
         if _pool_id not in SimpleDB._pool:
-            comm_kwargs = dict(host=host, port=port, user=user, passwd=password, db=db_name, charset="utf8")
+            comm_kwargs = dict(host=host, port=port, user=user, passwd=password, db=db_name)
+            if connect_charset is not None:
+                comm_kwargs["charset"] = connect_charset
             if shareable is True:
                 pool = PooledDB(MySQLdb, blocking=1, maxconnections=SimpleDB.max_connections, **comm_kwargs)
             else:
@@ -44,7 +49,8 @@ class SimpleDB(object):
         return conn, cursor
 
     def connect(self):
-        conn, cursor = self._connect(self.host, self._db_port, self._db_user, self._db_password, self._db_name)
+        conn, cursor = self._connect(self.host, self._db_port, self._db_user, self._db_password, self._db_name,
+                                     self._connect_charset)
         self.thread_data.conn = conn
         self.thread_data.cursor = cursor
         return conn, cursor

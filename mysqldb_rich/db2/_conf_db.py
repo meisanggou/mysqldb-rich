@@ -13,7 +13,7 @@ class ConfDB(SimpleDB):
     conf_path_environ_key = "DB_CONF_PATH"
 
     def __init__(self, conf_path=None, conf_dir=None, readonly=False, user=None, password=None, db_host=None,
-                 db_port=None, db_name=None):
+                 db_port=None, db_name=None, charset="utf8"):
         self.readonly = readonly
         if conf_path is None:
             if conf_dir is not None:
@@ -33,6 +33,8 @@ class ConfDB(SimpleDB):
             o["port"] = db_port
         if db_name is not None:
             o["db_name"] = db_name
+        if charset != "utf8":
+            o["charset"] = charset
         SimpleDB.__init__(self, **o)
 
     @staticmethod
@@ -43,10 +45,11 @@ class ConfDB(SimpleDB):
         host = config.get(basic_section, "host")
         db_name = config.get(basic_section, "name")
         db_port = config.getint(basic_section, "port")
+        charset = config.get(basic_section, "charset")
         if readonly is True:
             user_section = "%s_read_user" % basic_section
         else:
             user_section = "%s_user" % basic_section
         db_user = config.get(user_section, "user")
         db_password = config.get(user_section, "password")
-        return dict(host=host, db_name=db_name, port=db_port, user=db_user, password=db_password)
+        return dict(host=host, db_name=db_name, port=db_port, user=db_user, password=db_password, charset=charset)

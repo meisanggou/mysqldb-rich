@@ -1,5 +1,8 @@
 # mysqldb_rich
 
+## 3.0
+允许设置charset
+
 ## 2.9
 表结构更新时支持uni_key
 
