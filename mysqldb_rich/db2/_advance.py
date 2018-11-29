@@ -18,8 +18,8 @@ class RichDB(SelectDB, InsertDB, UpdateDB, DeleteDB):
 class DB(ConfDB, SelectDB, InsertDB, UpdateDB, DeleteDB):
     t_tables = "information_schema.TABLES"
 
-    def __init__(self, conf_path=None, conf_dir=None, readonly=False, user=None, password=None):
-        ConfDB.__init__(self, conf_path, conf_dir, readonly, user, password)
+    def __init__(self, conf_path=None, conf_dir=None, readonly=False, user=None, password=None, **kwargs):
+        ConfDB.__init__(self, conf_path, conf_dir, readonly, user, password, **kwargs)
 
     def execute_call(self, p_name, *args):
         sql_query = "CALL %s(" % p_name

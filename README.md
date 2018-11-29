@@ -1,6 +1,6 @@
 # mysqldb_rich
 
-## 3.1
+## 3.2
 允许设置use_unicode
 
 ## 3.0
