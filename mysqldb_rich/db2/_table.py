@@ -84,7 +84,7 @@ class TableDB(ConfDB, SelectDB):
             if "col_name" not in col or "col_type" not in col:
                 return False, "Bad col, need col_name and col_type"
             col_name = col["col_name"]
-            field_sql += "%s %s" % (col_name, col["col_type"])
+            field_sql += "`%s` %s" % (col_name, col["col_type"])
             if "allow_null" in col and col["allow_null"] is True:
                 pass
             else:
@@ -110,14 +110,14 @@ class TableDB(ConfDB, SelectDB):
             fields.append(field_sql)
         table_name = table_desc["table_name"]
         if len(primary_key) > 0:
-            fields.append(" PRIMARY KEY (%s)" % ",".join(primary_key))
+            fields.append(" PRIMARY KEY (`%s`)" % ",".join(primary_key))
         if len(uni_key) > 0:
             for key in uni_key:
-                fields.append(" UNIQUE KEY ({0})".format(key))
+                fields.append(" UNIQUE KEY (`{0}`)".format(key))
         if "uni_key" in table_desc:
             g_uni_key = table_desc["uni_key"]
             for gu_key, gu_value in g_uni_key.items():
-                fields.append(" UNIQUE KEY %s (%s)" % (gu_key, ",".join(gu_value)))
+                fields.append(" UNIQUE KEY `%s` (`%s`)" % (gu_key, "`,`".join(gu_value)))
         if len(mul_key) > 0:
             for key in mul_key:
                 fields.append(" INDEX {0} ({0})".format(key))
