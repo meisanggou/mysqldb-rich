@@ -114,6 +114,10 @@ class TableDB(ConfDB, SelectDB):
         if len(uni_key) > 0:
             for key in uni_key:
                 fields.append(" UNIQUE KEY ({0})".format(key))
+        if "uni_key" in table_desc:
+            g_uni_key = table_desc["uni_key"]
+            for gu_key, gu_value in g_uni_key.items():
+                fields.append(" UNIQUE KEY %s (%s)" % (gu_key, ",".join(gu_value)))
         if len(mul_key) > 0:
             for key in mul_key:
                 fields.append(" INDEX {0} ({0})".format(key))

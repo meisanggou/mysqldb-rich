@@ -1,5 +1,8 @@
 # mysqldb_rich
 
+## 3.3
+允许联合唯一索引
+
 ## 3.2
 允许设置use_unicode
 
