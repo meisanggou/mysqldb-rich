@@ -59,7 +59,7 @@ class SimpleDB(object):
         return conn, cursor
 
     def literal(self, s):
-        if isinstance(s, basestring):
+        if isinstance(s, str):
             pass
         elif isinstance(s, dict) or isinstance(s, tuple) or isinstance(s, list):
             s = json.dumps(s)
