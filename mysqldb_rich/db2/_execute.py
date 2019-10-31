@@ -134,8 +134,6 @@ class SelectDB(SimpleDB):
                             c_v = False
                         elif c_v == "\x01":
                             c_v = True
-                        else:
-                            print(c_v)
                     r_item[cols[i]] = c_v
                 select_items.append(r_item)
             return select_items
@@ -197,8 +195,6 @@ class SelectDB(SimpleDB):
                             c_v = False
                         elif c_v == "\x01":
                             c_v = True
-                        else:
-                            print(c_v)
                     r_item[package_keys[i]] = c_v
                 select_items.append(r_item)
             return select_items
