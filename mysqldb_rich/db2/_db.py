@@ -95,9 +95,11 @@ class SimpleDB(object):
             self.thread_data.cursor = None
         if self.thread_data.cursor is None:
             self.connect()
+        if not args:
+            args = None
         if args is not None and w_literal is False:
             if isinstance(args, (tuple, list)) is True:
-                args = map(self.literal, args)
+                args = list(map(self.literal, args))
             elif isinstance(args, dict) is True:
                 for k, v in args.items():
                     args[k] = self.literal(v)

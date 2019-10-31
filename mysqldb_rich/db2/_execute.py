@@ -58,7 +58,7 @@ class SelectDB(SimpleDB):
         if order_by is not None:
             if isinstance(order_by, list) or isinstance(order_by, tuple):
                 sql_query += " ORDER BY %s" % ",".join(order_by)
-            elif isinstance(order_by, unicode) or isinstance(order_by, str):
+            elif isinstance(order_by, str):
                 sql_query += " ORDER BY %s" % order_by
             if order_desc is True:
                 sql_query += " DESC"
@@ -109,7 +109,7 @@ class SelectDB(SimpleDB):
         if order_by is not None:
             if isinstance(order_by, list) or isinstance(order_by, tuple):
                 sql_query += " ORDER BY %s" % ",".join(order_by)
-            elif isinstance(order_by, unicode) or isinstance(order_by, str):
+            elif isinstance(order_by, str) or isinstance(order_by, str):
                 sql_query += " ORDER BY %s" % order_by
             if order_desc is True:
                 sql_query += " DESC"

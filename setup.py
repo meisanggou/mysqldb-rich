@@ -3,10 +3,8 @@
 
 #  __author__ = 'meisanggou'
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup
+
 
 import sys
 
@@ -16,7 +14,7 @@ if sys.version_info <= (3, 7):
     sys.exit(1)
 
 name = "mysqldb-rich"
-version = "4.1"
+version = "4.2"
 url = "https://github.com/meisanggou/mysqldb-rich"
 license = "MIT"
 author = "meisanggou"

@@ -8,11 +8,11 @@ from mysqldb_rich.db2 import DB
 
 __author__ = '鹛桑够'
 
-db = DB()
+db = DB(conf_path="D:/Project/dms/mysql_app.conf")
 # db.connect()
 
-t = "sys_users"
-cols = ["account", "password"]
+t = "sys_user"
+cols = ["user_name", "password"]
 
 
 def test_select(t_name, freq=1):
@@ -33,7 +33,7 @@ def test_select(t_name, freq=1):
     # print r_data["data"] if "data" in r_data else "no data"
     for i in range(freq):
         items = db.execute_select(t, cols=cols, package=True)
-        # print(items)
+        print(items)
     end_time = time.time()
     use_time = end_time - start_time
     sleep(2)
