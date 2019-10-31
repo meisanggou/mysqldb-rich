@@ -179,22 +179,22 @@ class TableDB(ConfDB, SelectDB):
                 fail_index.append((i, message))
         return True, fail_index
 
-    def create_from_json_file(self, json_file):
+    def create_from_json_file(self, json_file, encoding="utf8"):
         if os.path.isfile(json_file) is False:
             print("json file not exist")
             return False, "json file not exist"
-        read_json = open(json_file)
+        read_json = open(json_file, encoding=encoding)
         json_content = read_json.read()
         read_json.close()
         try:
-            json_desc = json.loads(json_content, "utf-8")
+            json_desc = json.loads(json_content)
         except ValueError as ve:
             print(ve)
             return False, "File content not json"
         result, message = self.create_mul_table(json_desc)
         return result, message
 
-    def create_from_dir(self, desc_dir):
+    def create_from_dir(self, desc_dir, encoding="utf8"):
         if os.path.isdir(desc_dir) is False:
             return False, "desc dir not exist"
         desc_files = os.listdir(desc_dir)
@@ -203,6 +203,6 @@ class TableDB(ConfDB, SelectDB):
             if not item.endswith(".json"):
                 continue
             file_path = desc_dir+ "/" + item
-            result, info = self.create_from_json_file(file_path)
+            result, info = self.create_from_json_file(file_path, encoding=encoding)
             create_info.append({"file_path": file_path, "create_result": result, "create_info": info})
         return True, create_info
