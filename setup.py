@@ -16,14 +16,14 @@ if sys.version_info <= (2, 7):
     sys.exit(1)
 
 name = "mysqldb-rich"
-version = "3.4"
+version = "4.0"
 url = "https://github.com/meisanggou/mysqldb-rich"
 license = "MIT"
 author = "meisanggou"
 short_description = "rich mysqldb"
 long_description = """rich operation for mysql"""
-keywords = "flask_helper"
-install_requires = ["DBUtils", "mysql-python"]
+keywords = "mysqldb-rich"
+install_requires = ["DBUtils", "pymysql"]
 
 setup(name=name,
       version=version,

@@ -2,7 +2,7 @@
 # coding: utf-8
 __author__ = '鹛桑够'
 
-import MySQLdb
+import pymysql
 from mysqldb_rich.db2 import DB, RichDB
 
 from DBUtils.PersistentDB import PersistentDB
@@ -19,10 +19,10 @@ def pool(shareable, db_name):
     g_pool = None
     if g_pool is None:
         if shareable is True:
-            g_pool = PooledDB(MySQLdb, host="127.0.01", port=3306, user="dms", passwd="gene_ac252", db=db_name,
+            g_pool = PooledDB(pymysql, host="127.0.01", port=3306, user="dms", passwd="gene_ac252", db=db_name,
                                       charset='utf8', blocking=1, maxconnections=3)
         else:
-            g_pool = PersistentDB(MySQLdb, host=host, port=port, user=user, passwd=password, db=db_name,
+            g_pool = PersistentDB(pymysql, host=host, port=port, user=user, passwd=password, db=db_name,
                                           charset='utf8')
 
     conn = g_pool.connection()

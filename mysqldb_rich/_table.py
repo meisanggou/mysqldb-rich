@@ -134,7 +134,11 @@ class TableDB(ConfDB, SelectDB):
                 item_comment = comment % t_item
                 create_table_sql += " COMMENT '%s'" % item_comment
                 create_table_sql += " DEFAULT CHARSET=utf8;"
-                self.execute(create_table_sql)
+                try:
+                    self.execute(create_table_sql)
+                except Exception as e:
+                    print("CREATE TABLE %s failed!" % table_name)
+                    raise e
                 execute_message += "CREATE TABLE %s Success \n" % t_name_item
         else:
             if self.table_exist(table_name) is True:
@@ -146,7 +150,11 @@ class TableDB(ConfDB, SelectDB):
             if "table_comment" in table_desc and table_desc["table_comment"] != "":
                 create_table_sql += " COMMENT '%s'" % table_desc["table_comment"]
             create_table_sql += " DEFAULT CHARSET=utf8;"
-            self.execute(create_table_sql)
+            try:
+                self.execute(create_table_sql)
+            except Exception as e:
+                print("CREATE TABLE %s failed!" % table_name)
+                raise e
             execute_message += "CREATE TABLE %s Success \n" % table_name
         return True, execute_message
 

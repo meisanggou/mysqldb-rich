@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import json
-import MySQLdb
+import pymysql
 
 __author__ = '鹛桑够'
 
@@ -22,7 +22,7 @@ class SimpleDB(object):
 
     @staticmethod
     def _connect(host, port, user, password, db_name):
-        conn = MySQLdb.connect(host=host, port=port, user=user, passwd=password, db=db_name, charset='utf8')
+        conn = pymysql.connect(host=host, port=port, user=user, passwd=password, db=db_name, charset='utf8')
         cursor = conn.cursor()
         conn.autocommit(True)
         return conn, cursor
@@ -57,10 +57,10 @@ class SimpleDB(object):
             if print_sql is True:
                 print(sql_query)
             handled_item = self.cursor.execute(sql_query)
-        except MySQLdb.Error as error:
+        except pymysql.Error as error:
             print(error)
             if freq >= 3 or error.args[0] in [1054, 1064, 1146, 1065]:  # 列不存在 sql错误 表不存在 empty_query
-                raise MySQLdb.Error(error)
+                raise pymysql.Error(error)
             self.connect()
             return self.execute(sql_query=sql_query, freq=freq + 1)
         return handled_item

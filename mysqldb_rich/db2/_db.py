@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import json
-import MySQLdb
+import pymysql
 import threading
 from DBUtils.PersistentDB import PersistentDB
 from DBUtils.PooledDB import PooledDB
@@ -42,9 +42,9 @@ class SimpleDB(object):
             if use_unicode is not None:
                 comm_kwargs["use_unicode"] = use_unicode
             if shareable is True:
-                pool = PooledDB(MySQLdb, blocking=1, maxconnections=SimpleDB.max_connections, **comm_kwargs)
+                pool = PooledDB(pymysql, blocking=1, maxconnections=SimpleDB.max_connections, **comm_kwargs)
             else:
-                pool = PersistentDB(MySQLdb, **comm_kwargs)
+                pool = PersistentDB(pymysql, **comm_kwargs)
             SimpleDB._pool[_pool_id] = pool
 
         conn = SimpleDB._pool[_pool_id].connection()
@@ -105,14 +105,14 @@ class SimpleDB(object):
             if print_sql is True:
                 print(sql_query)
             handled_item = self.thread_data.cursor.execute(sql_query, args=args)
-        except MySQLdb.Error as error:
+        except pymysql.Error as error:
             if self.current_transaction is True:
                 self.end_transaction(fail=True)
                 self.close()
-                raise MySQLdb.Error(error)
+                raise pymysql.Error(error)
             print(error)
             if freq >= 3 or error.args[0] in [1054, 1064, 1146, 1065, 1040]:  # 列不存在 sql错误 表不存在 empty_query too_many_connectons
-                raise MySQLdb.Error(error)
+                raise pymysql.Error(error)
             self.connect()
             return self.execute(sql_query=sql_query, args=args, freq=freq + 1, w_literal=True, auto_close=auto_close)
         if auto_close is True and self.current_transaction is False:
