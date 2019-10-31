@@ -1,6 +1,6 @@
 # mysqldb_rich
 
-## 4.2.3
+## 4.2.4
 使用pymysql替换mysql-python
 只支持python3
 
