@@ -77,9 +77,9 @@ class SelectDB(SimpleDB):
                         c_v = c_v.strftime(self.DATE_FORMAT)
                     elif isinstance(c_v, bytes):
                         if c_v == b"\x00":
-                            c_v = False
+                            c_v = 0
                         elif c_v == b"\x01":
-                            c_v = True
+                            c_v = 1
                     r_item[cols[i]] = c_v
                 select_items.append(r_item)
             return select_items
@@ -131,9 +131,9 @@ class SelectDB(SimpleDB):
                         c_v = c_v.strftime(self.DATE_FORMAT)
                     elif isinstance(c_v, bytes):
                         if c_v == b"\x00":
-                            c_v = False
+                            c_v = 0
                         elif c_v == b"\x01":
-                            c_v = True
+                            c_v = 1
                     r_item[cols[i]] = c_v
                 select_items.append(r_item)
             return select_items
@@ -192,9 +192,9 @@ class SelectDB(SimpleDB):
                         c_v = c_v.strftime(self.DATE_FORMAT)
                     elif isinstance(c_v, bytes):
                         if c_v == b"\x00":
-                            c_v = False
+                            c_v = 0
                         elif c_v == b"\x01":
-                            c_v = True
+                            c_v = 1
                     r_item[package_keys[i]] = c_v
                 select_items.append(r_item)
             return select_items
