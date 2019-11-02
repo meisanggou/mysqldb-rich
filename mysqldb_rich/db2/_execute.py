@@ -75,10 +75,10 @@ class SelectDB(SimpleDB):
                         c_v = c_v.strftime(self.TIME_FORMAT)
                     elif isinstance(c_v, date):
                         c_v = c_v.strftime(self.DATE_FORMAT)
-                    elif isinstance(c_v, str):
-                        if c_v == "\x00":
+                    elif isinstance(c_v, bytes):
+                        if c_v == b"\x00":
                             c_v = False
-                        elif c_v == "\x01":
+                        elif c_v == b"\x01":
                             c_v = True
                     r_item[cols[i]] = c_v
                 select_items.append(r_item)
@@ -129,10 +129,10 @@ class SelectDB(SimpleDB):
                         c_v = c_v.strftime(self.TIME_FORMAT)
                     elif isinstance(c_v, date):
                         c_v = c_v.strftime(self.DATE_FORMAT)
-                    elif isinstance(c_v, str):
-                        if c_v == "\x00":
+                    elif isinstance(c_v, bytes):
+                        if c_v == b"\x00":
                             c_v = False
-                        elif c_v == "\x01":
+                        elif c_v == b"\x01":
                             c_v = True
                     r_item[cols[i]] = c_v
                 select_items.append(r_item)
@@ -190,10 +190,10 @@ class SelectDB(SimpleDB):
                         c_v = c_v.strftime(self.TIME_FORMAT)
                     elif isinstance(c_v, date):
                         c_v = c_v.strftime(self.DATE_FORMAT)
-                    elif isinstance(c_v, str):
-                        if c_v == "\x00":
+                    elif isinstance(c_v, bytes):
+                        if c_v == b"\x00":
                             c_v = False
-                        elif c_v == "\x01":
+                        elif c_v == b"\x01":
                             c_v = True
                     r_item[package_keys[i]] = c_v
                 select_items.append(r_item)
