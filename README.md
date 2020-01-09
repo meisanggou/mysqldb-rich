@@ -1,5 +1,8 @@
 # mysqldb_rich
 
+## 4.2.9
+插入数据时，出现重复，支持新值+旧值
+
 ## 4.2.8
 使用pymysql替换mysql-python
 只支持python3

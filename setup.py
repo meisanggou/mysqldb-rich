@@ -14,7 +14,7 @@ if sys.version_info <= (3, 6):
     sys.exit(1)
 
 name = "mysqldb-rich"
-version = "4.2.8"
+version = "4.2.9"
 url = "https://github.com/meisanggou/mysqldb-rich"
 license = "MIT"
 author = "meisanggou"

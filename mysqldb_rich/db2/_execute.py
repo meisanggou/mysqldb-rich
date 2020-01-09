@@ -212,11 +212,11 @@ class InsertDB(SimpleDB):
             sql_query = "INSERT INTO %s (%s) VALUES (%%(%s)s);" % (table_name, ",".join(keys), ")s,%(".join(keys))
         return self.execute(sql_query, args=kwargs, auto_close=True)
 
-    def execute_duplicate_insert(self, t_name, kwargs, u_keys=None, p1_keys=None, u_v=None):
+    def execute_duplicate_insert(self, t_name, kwargs, u_keys=None, p1_keys=None, **options):
         if isinstance(kwargs, dict) is False:
             raise TypeError()
-        if u_v is None:
-            u_v = []
+        u_v = options.pop('u_v', list())
+        plus_keys = options.pop('plus_keys', list())
         if isinstance(u_v, list) is False:
             raise TypeError()
         keys = kwargs.keys()
@@ -224,6 +224,9 @@ class InsertDB(SimpleDB):
             u_v.extend(map(lambda x: "{0}=VALUES({0})".format(x), u_keys))
         if isinstance(p1_keys, (tuple, list)) is True:
             u_v.extend(map(lambda x: "{0}={0}+1".format(x), p1_keys))
+        if isinstance(plus_keys, (tuple, list)):
+            u_v.extend(map(lambda x: "{0}={0}+VALUES({0})".format(x),
+                           set(plus_keys)))
         if len(u_v) <= 0:
             return self.execute_insert(t_name, kwargs)
         sql = "INSERT INTO %s (%s) VALUES (%%(%s)s) ON DUPLICATE KEY UPDATE %s;" \
