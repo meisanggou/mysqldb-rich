@@ -8,8 +8,8 @@ from setuptools import setup
 
 import sys
 
-if sys.version_info <= (3, 6):
-    sys.stderr.write("ERROR: mysqldb-rich requires Python Version 3.6 or above.\n")
+if sys.version_info <= (2, 7):
+    sys.stderr.write("ERROR: mysqldb-rich requires Python Version 2.7 or above.\n")
     sys.stderr.write("Your Python Version is %s.%s.%s.\n" % sys.version_info[:3])
     sys.exit(1)
 
