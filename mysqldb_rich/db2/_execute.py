@@ -2,7 +2,7 @@
 # coding: utf-8
 
 from datetime import datetime, date
-from ._db import SimpleDB
+from _db import SimpleDB
 
 __author__ = '鹛桑够'
 
@@ -58,7 +58,7 @@ class SelectDB(SimpleDB):
         if order_by is not None:
             if isinstance(order_by, list) or isinstance(order_by, tuple):
                 sql_query += " ORDER BY %s" % ",".join(order_by)
-            elif isinstance(order_by, str):
+            elif isinstance(order_by, unicode) or isinstance(order_by, str):
                 sql_query += " ORDER BY %s" % order_by
             if order_desc is True:
                 sql_query += " DESC"
@@ -75,11 +75,13 @@ class SelectDB(SimpleDB):
                         c_v = c_v.strftime(self.TIME_FORMAT)
                     elif isinstance(c_v, date):
                         c_v = c_v.strftime(self.DATE_FORMAT)
-                    elif isinstance(c_v, bytes):
-                        if c_v == b"\x00":
-                            c_v = 0
-                        elif c_v == b"\x01":
-                            c_v = 1
+                    elif isinstance(c_v, str):
+                        if c_v == "\x00":
+                            c_v = False
+                        elif c_v == "\x01":
+                            c_v = True
+                        else:
+                            print(c_v)
                     r_item[cols[i]] = c_v
                 select_items.append(r_item)
             return select_items
@@ -107,7 +109,7 @@ class SelectDB(SimpleDB):
         if order_by is not None:
             if isinstance(order_by, list) or isinstance(order_by, tuple):
                 sql_query += " ORDER BY %s" % ",".join(order_by)
-            elif isinstance(order_by, str) or isinstance(order_by, str):
+            elif isinstance(order_by, unicode) or isinstance(order_by, str):
                 sql_query += " ORDER BY %s" % order_by
             if order_desc is True:
                 sql_query += " DESC"
@@ -129,11 +131,13 @@ class SelectDB(SimpleDB):
                         c_v = c_v.strftime(self.TIME_FORMAT)
                     elif isinstance(c_v, date):
                         c_v = c_v.strftime(self.DATE_FORMAT)
-                    elif isinstance(c_v, bytes):
-                        if c_v == b"\x00":
-                            c_v = 0
-                        elif c_v == b"\x01":
-                            c_v = 1
+                    elif isinstance(c_v, str):
+                        if c_v == "\x00":
+                            c_v = False
+                        elif c_v == "\x01":
+                            c_v = True
+                        else:
+                            print(c_v)
                     r_item[cols[i]] = c_v
                 select_items.append(r_item)
             return select_items
@@ -190,11 +194,13 @@ class SelectDB(SimpleDB):
                         c_v = c_v.strftime(self.TIME_FORMAT)
                     elif isinstance(c_v, date):
                         c_v = c_v.strftime(self.DATE_FORMAT)
-                    elif isinstance(c_v, bytes):
-                        if c_v == b"\x00":
-                            c_v = 0
-                        elif c_v == b"\x01":
-                            c_v = 1
+                    elif isinstance(c_v, str):
+                        if c_v == "\x00":
+                            c_v = False
+                        elif c_v == "\x01":
+                            c_v = True
+                        else:
+                            print(c_v)
                     r_item[package_keys[i]] = c_v
                 select_items.append(r_item)
             return select_items
@@ -212,11 +218,11 @@ class InsertDB(SimpleDB):
             sql_query = "INSERT INTO %s (%s) VALUES (%%(%s)s);" % (table_name, ",".join(keys), ")s,%(".join(keys))
         return self.execute(sql_query, args=kwargs, auto_close=True)
 
-    def execute_duplicate_insert(self, t_name, kwargs, u_keys=None, p1_keys=None, **options):
+    def execute_duplicate_insert(self, t_name, kwargs, u_keys=None, p1_keys=None, u_v=None):
         if isinstance(kwargs, dict) is False:
             raise TypeError()
-        u_v = options.pop('u_v', list())
-        plus_keys = options.pop('plus_keys', list())
+        if u_v is None:
+            u_v = []
         if isinstance(u_v, list) is False:
             raise TypeError()
         keys = kwargs.keys()
@@ -224,9 +230,6 @@ class InsertDB(SimpleDB):
             u_v.extend(map(lambda x: "{0}=VALUES({0})".format(x), u_keys))
         if isinstance(p1_keys, (tuple, list)) is True:
             u_v.extend(map(lambda x: "{0}={0}+1".format(x), p1_keys))
-        if isinstance(plus_keys, (tuple, list)):
-            u_v.extend(map(lambda x: "{0}={0}+VALUES({0})".format(x),
-                           set(plus_keys)))
         if len(u_v) <= 0:
             return self.execute_insert(t_name, kwargs)
         sql = "INSERT INTO %s (%s) VALUES (%%(%s)s) ON DUPLICATE KEY UPDATE %s;" \

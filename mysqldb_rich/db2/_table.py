@@ -4,8 +4,8 @@
 import os
 import sys
 import json
-from ._conf_db import ConfDB
-from ._execute import SelectDB
+from _conf_db import ConfDB
+from _execute import SelectDB
 
 __author__ = '鹛桑够'
 
@@ -36,6 +36,8 @@ class TableDB(ConfDB, SelectDB):
                          uni_key=False):
         add_sql = u"ALTER TABLE {t_name} ADD COLUMN  {c_name} {c_type} {c_dv} {c_null} COMMENT '{c_comment}';"
         c_null = "" if allow_null is True else "NOT NULL"
+        if default_value == '':
+            default_value = "''"
         c_dv = "" if default_value is None else "DEFAULT %s" % default_value
         sql = add_sql.format(t_name=t_name, c_name=col_name, c_type=col_type, c_null=c_null, c_comment=col_comment,
                              c_dv=c_dv)
@@ -99,7 +101,6 @@ class TableDB(ConfDB, SelectDB):
             if "mul_key" in col and col["mul_key"] is True:
                 mul_key.append(col_name)
             if "default_value" in col and col["default_value"] is not None:
-                "".startswith("int")
                 if col["col_type"].startswith("int") or col["col_type"].startswith("tinyint") or col["col_type"].startswith("bit"):
                     field_sql += " default %s" % col["default_value"]
                 else:
@@ -179,22 +180,22 @@ class TableDB(ConfDB, SelectDB):
                 fail_index.append((i, message))
         return True, fail_index
 
-    def create_from_json_file(self, json_file, encoding="utf8"):
+    def create_from_json_file(self, json_file):
         if os.path.isfile(json_file) is False:
             print("json file not exist")
             return False, "json file not exist"
-        read_json = open(json_file, encoding=encoding)
+        read_json = open(json_file)
         json_content = read_json.read()
         read_json.close()
         try:
-            json_desc = json.loads(json_content)
+            json_desc = json.loads(json_content, "utf-8")
         except ValueError as ve:
             print(ve)
             return False, "File content not json"
         result, message = self.create_mul_table(json_desc)
         return result, message
 
-    def create_from_dir(self, desc_dir, encoding="utf8"):
+    def create_from_dir(self, desc_dir):
         if os.path.isdir(desc_dir) is False:
             return False, "desc dir not exist"
         desc_files = os.listdir(desc_dir)
@@ -203,6 +204,6 @@ class TableDB(ConfDB, SelectDB):
             if not item.endswith(".json"):
                 continue
             file_path = desc_dir+ "/" + item
-            result, info = self.create_from_json_file(file_path, encoding=encoding)
+            result, info = self.create_from_json_file(file_path)
             create_info.append({"file_path": file_path, "create_result": result, "create_info": info})
         return True, create_info

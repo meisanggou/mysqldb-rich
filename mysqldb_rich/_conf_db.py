@@ -2,8 +2,8 @@
 # coding: utf-8
 
 import os
-import configparser
-from ._db import SimpleDB
+import ConfigParser
+from _db import SimpleDB
 
 __author__ = '鹛桑够'
 
@@ -30,7 +30,7 @@ class ConfDB(SimpleDB):
 
     @staticmethod
     def _read_conf(conf_path, readonly):
-        config = configparser.ConfigParser()
+        config = ConfigParser.ConfigParser()
         config.read(conf_path)
         basic_section = "db_basic"
         host = config.get(basic_section, "host")

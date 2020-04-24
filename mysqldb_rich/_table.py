@@ -4,8 +4,8 @@
 import os
 import sys
 import json
-from ._conf_db import ConfDB
-from ._execute import SelectDB
+from _conf_db import ConfDB
+from _execute import SelectDB
 
 __author__ = '鹛桑够'
 

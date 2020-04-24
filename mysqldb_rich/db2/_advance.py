@@ -2,8 +2,8 @@
 # coding: utf-8
 
 import os
-from ._conf_db import ConfDB
-from ._execute import SimpleDB, SelectDB, InsertDB, UpdateDB, DeleteDB
+from _conf_db import ConfDB
+from _execute import SimpleDB, SelectDB, InsertDB, UpdateDB, DeleteDB
 
 
 __author__ = '鹛桑够'
@@ -36,8 +36,8 @@ class DB(ConfDB, SelectDB, InsertDB, UpdateDB, DeleteDB):
         return True
 
     def create_user(self, user, password, host='localhost', db=None, readonly=False):
-        items = self.execute_select("mysql.user", where_value=dict(user=user, host=host))
-        if len(items) <= 0:
+        l = self.execute_select("mysql.user", where_value=dict(user=user, host=host))
+        if l <= 0:
             c_sql = "CREATE USER %s@%s IDENTIFIED BY %s;"
             self.execute(c_sql, args=(user, host, password), auto_close=True)
         if db is not None:

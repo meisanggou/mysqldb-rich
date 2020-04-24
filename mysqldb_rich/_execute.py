@@ -2,7 +2,7 @@
 # coding: utf-8
 
 from datetime import datetime, date
-from ._db import SimpleDB
+from _db import SimpleDB
 
 __author__ = '鹛桑够'
 

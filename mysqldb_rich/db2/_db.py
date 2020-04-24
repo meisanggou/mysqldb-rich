@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import json
-import pymysql
+import MySQLdb
 import threading
 from DBUtils.PersistentDB import PersistentDB
 from DBUtils.PooledDB import PooledDB
@@ -42,9 +42,9 @@ class SimpleDB(object):
             if use_unicode is not None:
                 comm_kwargs["use_unicode"] = use_unicode
             if shareable is True:
-                pool = PooledDB(pymysql, blocking=1, maxconnections=SimpleDB.max_connections, **comm_kwargs)
+                pool = PooledDB(MySQLdb, blocking=1, maxconnections=SimpleDB.max_connections, **comm_kwargs)
             else:
-                pool = PersistentDB(pymysql, **comm_kwargs)
+                pool = PersistentDB(MySQLdb, **comm_kwargs)
             SimpleDB._pool[_pool_id] = pool
 
         conn = SimpleDB._pool[_pool_id].connection()
@@ -59,7 +59,7 @@ class SimpleDB(object):
         return conn, cursor
 
     def literal(self, s):
-        if isinstance(s, str):
+        if isinstance(s, basestring):
             pass
         elif isinstance(s, dict) or isinstance(s, tuple) or isinstance(s, list):
             s = json.dumps(s)
@@ -95,11 +95,9 @@ class SimpleDB(object):
             self.thread_data.cursor = None
         if self.thread_data.cursor is None:
             self.connect()
-        if not args:
-            args = None
         if args is not None and w_literal is False:
             if isinstance(args, (tuple, list)) is True:
-                args = list(map(self.literal, args))
+                args = map(self.literal, args)
             elif isinstance(args, dict) is True:
                 for k, v in args.items():
                     args[k] = self.literal(v)
@@ -107,14 +105,14 @@ class SimpleDB(object):
             if print_sql is True:
                 print(sql_query)
             handled_item = self.thread_data.cursor.execute(sql_query, args=args)
-        except pymysql.Error as error:
+        except MySQLdb.Error as error:
             if self.current_transaction is True:
                 self.end_transaction(fail=True)
                 self.close()
-                raise pymysql.Error(error)
+                raise MySQLdb.Error(error)
             print(error)
             if freq >= 3 or error.args[0] in [1054, 1064, 1146, 1065, 1040]:  # 列不存在 sql错误 表不存在 empty_query too_many_connectons
-                raise pymysql.Error(error)
+                raise MySQLdb.Error(error)
             self.connect()
             return self.execute(sql_query=sql_query, args=args, freq=freq + 1, w_literal=True, auto_close=auto_close)
         if auto_close is True and self.current_transaction is False:
