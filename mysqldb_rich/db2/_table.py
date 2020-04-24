@@ -36,6 +36,8 @@ class TableDB(ConfDB, SelectDB):
                          uni_key=False):
         add_sql = u"ALTER TABLE {t_name} ADD COLUMN  {c_name} {c_type} {c_dv} {c_null} COMMENT '{c_comment}';"
         c_null = "" if allow_null is True else "NOT NULL"
+        if default_value == '':
+            default_value == "''"
         c_dv = "" if default_value is None else "DEFAULT %s" % default_value
         sql = add_sql.format(t_name=t_name, c_name=col_name, c_type=col_type, c_null=c_null, c_comment=col_comment,
                              c_dv=c_dv)
