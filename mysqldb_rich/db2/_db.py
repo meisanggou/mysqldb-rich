@@ -4,8 +4,12 @@
 import json
 import pymysql
 import threading
-from DBUtils.PersistentDB import PersistentDB
-from DBUtils.PooledDB import PooledDB
+try:
+    from dbutils.persistent_db import PersistentDB
+    from dbutils.pooled_db import PooledDB
+except ImportError:
+    from DBUtils.PersistentDB import PersistentDB
+    from DBUtils.PooledDB import PooledDB
 
 __author__ = '鹛桑够'
 

@@ -5,8 +5,13 @@ __author__ = '鹛桑够'
 import pymysql
 from mysqldb_rich.db2 import DB, RichDB
 
-from DBUtils.PersistentDB import PersistentDB
-from DBUtils.PooledDB import PooledDB
+try:
+    from dbutils.persistent_db import PersistentDB
+    from dbutils.pooled_db import PooledDB
+except ImportError:
+    from DBUtils.PersistentDB import PersistentDB
+    from DBUtils.PooledDB import PooledDB
+
 
 g_pool = None
 
