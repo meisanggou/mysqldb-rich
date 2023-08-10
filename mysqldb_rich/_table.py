@@ -60,11 +60,6 @@ class TableDB(ConfDB, SelectDB):
                     cols_items.remove(cols_item)
             if is_exist is False:
                 desc_item["allow_null"] = True
-                if 'pri_key' in desc_item:
-                    sys.stderr.write('Adding new primary key columns(%s.%s) '
-                                     'is not supported' % (t_name,
-                                                           cols_item['column_name']))
-                    continue
                 self.add_table_column(t_name, **desc_item)
                 print("%s not exist" % desc_item["col_name"])
         if len(cols_items) > 0:
